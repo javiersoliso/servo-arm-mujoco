@@ -1,0 +1,326 @@
+{
+  "variant": "v9_smooth_finetune",
+  "seed": 3,
+  "steps": 300000,
+  "init_from": "runs/long_v7_strong",
+  "learning_rate": 0.0001,
+  "domain_randomisation": true,
+  "wall_clock_s": 296.0,
+  "train_success_rate": 0.52,
+  "train_final_distance_cm": 6.61,
+  "train_jerk_cost": 0.2275,
+  "reward_cfg": {
+    "version": "v9_smooth_finetune",
+    "w_potential": 40.0,
+    "w_distance": 0.0,
+    "w_success": 2.0,
+    "w_action": 0.02,
+    "w_jerk": 0.25,
+    "w_qvel": 0.005,
+    "w_prox": 0.0,
+    "prox_sigma": 0.03,
+    "sparse_only": false
+  },
+  "curve": [
+    {
+      "steps": 5000,
+      "success": 0.5536,
+      "distance_cm": 5.63
+    },
+    {
+      "steps": 10000,
+      "success": 0.56,
+      "distance_cm": 5.78
+    },
+    {
+      "steps": 15000,
+      "success": 0.66,
+      "distance_cm": 4.87
+    },
+    {
+      "steps": 20000,
+      "success": 0.58,
+      "distance_cm": 5.84
+    },
+    {
+      "steps": 25000,
+      "success": 0.58,
+      "distance_cm": 6.5
+    },
+    {
+      "steps": 30000,
+      "success": 0.52,
+      "distance_cm": 7.04
+    },
+    {
+      "steps": 35000,
+      "success": 0.61,
+      "distance_cm": 5.08
+    },
+    {
+      "steps": 40000,
+      "success": 0.67,
+      "distance_cm": 4.72
+    },
+    {
+      "steps": 45000,
+      "success": 0.58,
+      "distance_cm": 5.92
+    },
+    {
+      "steps": 50000,
+      "success": 0.53,
+      "distance_cm": 6.18
+    },
+    {
+      "steps": 55000,
+      "success": 0.46,
+      "distance_cm": 7.31
+    },
+    {
+      "steps": 60000,
+      "success": 0.52,
+      "distance_cm": 7.23
+    },
+    {
+      "steps": 65000,
+      "success": 0.47,
+      "distance_cm": 7.51
+    },
+    {
+      "steps": 70000,
+      "success": 0.5,
+      "distance_cm": 6.55
+    },
+    {
+      "steps": 75000,
+      "success": 0.48,
+      "distance_cm": 7.31
+    },
+    {
+      "steps": 80000,
+      "success": 0.57,
+      "distance_cm": 6.34
+    },
+    {
+      "steps": 85000,
+      "success": 0.59,
+      "distance_cm": 6.49
+    },
+    {
+      "steps": 90000,
+      "success": 0.53,
+      "distance_cm": 6.92
+    },
+    {
+      "steps": 95000,
+      "success": 0.49,
+      "distance_cm": 6.99
+    },
+    {
+      "steps": 100000,
+      "success": 0.59,
+      "distance_cm": 5.82
+    },
+    {
+      "steps": 105000,
+      "success": 0.47,
+      "distance_cm": 7.05
+    },
+    {
+      "steps": 110000,
+      "success": 0.45,
+      "distance_cm": 7.6
+    },
+    {
+      "steps": 115000,
+      "success": 0.54,
+      "distance_cm": 6.52
+    },
+    {
+      "steps": 120000,
+      "success": 0.62,
+      "distance_cm": 5.05
+    },
+    {
+      "steps": 125000,
+      "success": 0.54,
+      "distance_cm": 6.54
+    },
+    {
+      "steps": 130000,
+      "success": 0.53,
+      "distance_cm": 6.81
+    },
+    {
+      "steps": 135000,
+      "success": 0.46,
+      "distance_cm": 7.35
+    },
+    {
+      "steps": 140000,
+      "success": 0.36,
+      "distance_cm": 7.55
+    },
+    {
+      "steps": 145000,
+      "success": 0.38,
+      "distance_cm": 8.64
+    },
+    {
+      "steps": 150000,
+      "success": 0.34,
+      "distance_cm": 9.38
+    },
+    {
+      "steps": 155000,
+      "success": 0.4,
+      "distance_cm": 8.04
+    },
+    {
+      "steps": 160000,
+      "success": 0.43,
+      "distance_cm": 7.31
+    },
+    {
+      "steps": 165000,
+      "success": 0.52,
+      "distance_cm": 6.17
+    },
+    {
+      "steps": 170000,
+      "success": 0.46,
+      "distance_cm": 6.34
+    },
+    {
+      "steps": 175000,
+      "success": 0.48,
+      "distance_cm": 5.83
+    },
+    {
+      "steps": 180000,
+      "success": 0.48,
+      "distance_cm": 6.4
+    },
+    {
+      "steps": 185000,
+      "success": 0.44,
+      "distance_cm": 7.15
+    },
+    {
+      "steps": 190000,
+      "success": 0.51,
+      "distance_cm": 7.08
+    },
+    {
+      "steps": 195000,
+      "success": 0.51,
+      "distance_cm": 6.53
+    },
+    {
+      "steps": 200000,
+      "success": 0.52,
+      "distance_cm": 7.12
+    },
+    {
+      "steps": 205000,
+      "success": 0.47,
+      "distance_cm": 6.95
+    },
+    {
+      "steps": 210000,
+      "success": 0.42,
+      "distance_cm": 7.87
+    },
+    {
+      "steps": 215000,
+      "success": 0.51,
+      "distance_cm": 8.53
+    },
+    {
+      "steps": 220000,
+      "success": 0.52,
+      "distance_cm": 8.89
+    },
+    {
+      "steps": 225000,
+      "success": 0.51,
+      "distance_cm": 8.52
+    },
+    {
+      "steps": 230000,
+      "success": 0.52,
+      "distance_cm": 6.66
+    },
+    {
+      "steps": 235000,
+      "success": 0.55,
+      "distance_cm": 5.64
+    },
+    {
+      "steps": 240000,
+      "success": 0.56,
+      "distance_cm": 6.13
+    },
+    {
+      "steps": 245000,
+      "success": 0.55,
+      "distance_cm": 6.48
+    },
+    {
+      "steps": 250000,
+      "success": 0.46,
+      "distance_cm": 6.27
+    },
+    {
+      "steps": 255000,
+      "success": 0.5,
+      "distance_cm": 6.95
+    },
+    {
+      "steps": 260000,
+      "success": 0.48,
+      "distance_cm": 7.73
+    },
+    {
+      "steps": 265000,
+      "success": 0.48,
+      "distance_cm": 7.95
+    },
+    {
+      "steps": 270000,
+      "success": 0.4,
+      "distance_cm": 8.87
+    },
+    {
+      "steps": 275000,
+      "success": 0.27,
+      "distance_cm": 9.59
+    },
+    {
+      "steps": 280000,
+      "success": 0.37,
+      "distance_cm": 7.59
+    },
+    {
+      "steps": 285000,
+      "success": 0.47,
+      "distance_cm": 6.81
+    },
+    {
+      "steps": 290000,
+      "success": 0.53,
+      "distance_cm": 6.69
+    },
+    {
+      "steps": 295000,
+      "success": 0.5,
+      "distance_cm": 7.24
+    },
+    {
+      "steps": 300000,
+      "success": 0.5,
+      "distance_cm": 7.0
+    }
+  ]
+}

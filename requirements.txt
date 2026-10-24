@@ -1,0 +1,22 @@
+# Pinned because the *combination* matters. Install into a clean virtualenv:
+#
+#   python3 -m venv venv
+#   venv/bin/pip install --index-url https://download.pytorch.org/whl/cpu torch==2.13.0
+#   venv/bin/pip install -r requirements.txt
+#
+# The clean venv is not a style preference. Installing the CUDA build of torch
+# leaves nvidia-*/cuda-* packages behind; a later CPU-only torch still loads
+# ~49 cuda.bindings modules from them, and in the same process as MuJoCo that
+# corrupts the heap. The symptom is a SIGSEGV inside libc free() while
+# stable-baselines3 builds its optimiser -- a traceback that points squarely
+# at torch and is completely misleading. It is also NONDETERMINISTIC, so a
+# single passing run proves nothing; the fix was confirmed over 10 consecutive
+# trials. Full write-up: docs/physics_debugging.md, "the training segfault".
+mujoco==3.3.5
+gymnasium==1.3.0
+stable-baselines3==2.9.0
+numpy==2.2.6
+imageio==2.37.0
+imageio-ffmpeg==0.6.0
+# torch==2.13.0+cpu  -- install from the cpu index URL above, not from here
+tensorboard

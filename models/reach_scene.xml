@@ -1,0 +1,41 @@
+<mujoco model="servoarm4_reach">
+  <!-- Task scene: arm + a floating target the policy must drive the tip to.
+       The robot model is included verbatim so the same arm.xml is shared by
+       every task scene and can never drift between them. -->
+  <include file="arm.xml"/>
+
+  <statistic center="0.05 0 0.15" extent="0.6" meansize="0.02"/>
+
+  <visual>
+    <headlight diffuse="0.55 0.55 0.55" ambient="0.35 0.35 0.35" specular="0 0 0"/>
+    <rgba haze="0.15 0.20 0.24 1"/>
+    <global azimuth="140" elevation="-22" offwidth="960" offheight="720"/>
+    <quality shadowsize="2048"/>
+  </visual>
+
+  <asset>
+    <texture type="skybox" builtin="gradient" rgb1="0.24 0.29 0.35" rgb2="0.05 0.06 0.08"
+             width="512" height="3072"/>
+    <texture name="grid" type="2d" builtin="checker" rgb1="0.19 0.21 0.24" rgb2="0.14 0.16 0.19"
+             width="300" height="300"/>
+    <material name="grid_mat" texture="grid" texrepeat="8 8" texuniform="true" reflectance="0.05"/>
+  </asset>
+
+  <worldbody>
+    <light pos="0.3 -0.3 0.8" dir="-0.3 0.3 -0.8" directional="true" diffuse="0.5 0.5 0.5"/>
+    <geom name="floor" type="plane" size="1 1 0.01" material="grid_mat"
+          friction="1.0 0.01 0.001" condim="4"/>
+
+    <!-- Mocap: the target is teleported by the env each reset. It carries no
+         collision geometry, so it can never perturb the dynamics — a reward
+         landmark, not a physical object. -->
+    <body name="target" mocap="true" pos="0.16 0.0 0.14">
+      <geom name="target_g" type="sphere" size="0.016" contype="0" conaffinity="0"
+            rgba="0.20 0.80 0.45 0.45"/>
+      <site name="target_site" size="0.004" rgba="0.20 0.80 0.45 1"/>
+    </body>
+
+    <camera name="showcase" pos="0.52 -0.46 0.40" xyaxes="0.66 0.75 0 -0.26 0.23 0.94"/>
+    <camera name="front"    pos="0.62 0 0.22"     xyaxes="0 1 0 -0.30 0 0.95"/>
+  </worldbody>
+</mujoco>

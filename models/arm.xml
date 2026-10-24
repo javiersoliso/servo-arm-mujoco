@@ -1,0 +1,137 @@
+<mujoco model="servoarm4">
+  <!-- =====================================================================
+       servoarm4 — a 4-DOF hobby servo arm, modelled from scratch in MJCF.
+
+       It describes a planned desktop arm (3x MG996R + 1x SG90) that has NOT
+       been built yet. Servo stall torque and speed come from the datasheets;
+       link lengths, material density, damping, armature, friction and gains
+       are design estimates or assumptions, to be identified on the physical
+       arm once it is printed and assembled. The intent is that every number
+       here is traceable to a datasheet or a stated assumption rather than
+       tuned until the sim "looked right", so that the sim-to-real gap can be
+       measured instead of argued about once the hardware exists.
+
+       Frame convention: +Z up, arm extends toward +X at zero pose.
+       Units: SI (m, kg, s, N, N*m, rad).
+       ===================================================================== -->
+
+  <compiler angle="radian" autolimits="true" inertiafromgeom="auto"/>
+
+  <!-- Timestep chosen from tests/validate_physics.py, not by habit.
+       Simulated result: this model is NOT stiff - Euler, implicitfast and RK4 all
+       remain stable out to 8 ms even under adversarial square-wave control,
+       because the armature and damping terms keep the system well conditioned.
+       Stability is not accuracy, though: the accuracy sweep shows tip-position
+       error against an RK4/0.1 ms reference growing roughly linearly with dt,
+       and 2 ms is the largest step that stays under the 1 mm error budget
+       (one tip-pad radius / 12). implicitfast is preferred over Euler at equal
+       accuracy because it integrates the damping implicitly, leaving headroom
+       if a stiffer end effector or contact model is added later. -->
+  <option timestep="0.002" integrator="RK4" gravity="0 0 -9.81"/>
+
+  <default>
+    <default class="servoarm">
+
+      <!-- Shared joint physics for a hobby servo.
+           damping     : viscous loss in the gear train. Estimated value, not
+                         yet identified; to be identified on the physical arm
+                         (for example from the free-swing decay of each joint).
+           armature    : rotor inertia reflected through the reduction, i.e.
+                         J_rotor * N^2 (estimated; to be identified on the
+                         physical arm). For a ~250:1 MG996R this dominates the
+                         link inertia and is the single most important term
+                         for matching real settling behaviour. Omitting it is
+                         the classic reason a servo arm is jittery in sim and
+                         sluggish in reality.
+           frictionloss: Coulomb stiction at the output shaft (estimated).
+           kp / kv     : position-loop gains, design assumptions; only the
+                         force limits below come from the datasheets. -->
+      <default class="servo_big">
+        <joint type="hinge" damping="0.18" armature="0.012" frictionloss="0.02"/>
+        <!-- MG996R: 10 kgf*cm at 6V = 0.98 N*m stall. -->
+        <position kp="7.0" kv="0.35" forcerange="-0.98 0.98"/>
+      </default>
+
+      <default class="servo_small">
+        <joint type="hinge" damping="0.06" armature="0.004" frictionloss="0.008"/>
+        <!-- SG90: 1.8 kgf*cm at 4.8V = 0.18 N*m stall. -->
+        <position kp="2.2" kv="0.10" forcerange="-0.18 0.18"/>
+      </default>
+
+      <!-- Assumed density, 1180 kg/m^3 (cast acrylic). The material of the
+           final parts is a design assumption, so link masses are to be
+           identified on the physical arm. The compiler derives link masses and
+           inertia tensors from this, so a geometry edit cannot silently
+           desync the mass properties. -->
+      <default class="link">
+        <geom type="capsule" density="1180" rgba="0.30 0.34 0.40 1"
+              friction="0.9 0.01 0.001" condim="4"/>
+      </default>
+
+      <default class="bracket">
+        <geom type="cylinder" density="1180" rgba="0.16 0.18 0.22 1"
+              friction="0.9 0.01 0.001" condim="4"/>
+      </default>
+    </default>
+  </default>
+
+  <worldbody>
+    <body name="base" pos="0 0 0" childclass="servoarm">
+      <geom name="base_plate" type="box" size="0.055 0.055 0.006" pos="0 0 0.006"
+            density="1180" rgba="0.16 0.18 0.22 1"/>
+      <geom name="base_pillar" class="bracket" size="0.028 0.019" pos="0 0 0.031"/>
+
+      <body name="yaw_link" pos="0 0 0.050">
+        <joint name="base_yaw" class="servo_big" axis="0 0 1" range="-1.5708 1.5708"/>
+        <geom name="yaw_hub" class="bracket" size="0.024 0.014" pos="0 0 0.014"/>
+
+        <body name="upper_arm" pos="0 0 0.030">
+          <joint name="shoulder" class="servo_big" axis="0 1 0" range="-0.35 2.10"/>
+          <geom name="upper_arm_g" class="link" size="0.015" fromto="0 0 0 0 0 0.100"/>
+
+          <body name="forearm" pos="0 0 0.100">
+            <joint name="elbow" class="servo_big" axis="0 1 0" range="-2.40 0.20"/>
+            <geom name="forearm_g" class="link" size="0.013" fromto="0 0 0 0 0 0.100"/>
+
+            <body name="wrist" pos="0 0 0.100">
+              <joint name="wrist_pitch" class="servo_small" axis="0 1 0" range="-1.5708 1.5708"/>
+              <geom name="wrist_g" class="link" size="0.011" fromto="0 0 0 0 0 0.050"/>
+              <geom name="tip_pad" type="sphere" size="0.012" pos="0 0 0.055"
+                    density="900" rgba="0.85 0.42 0.18 1" friction="1.2 0.02 0.002" condim="4"/>
+              <!-- The site, not the geom, is the kinematic reference the env
+                   reads. Swapping the end effector later cannot move it. -->
+              <site name="tip" pos="0 0 0.055" size="0.006" rgba="1 0.5 0.2 0.35"/>
+            </body>
+          </body>
+        </body>
+      </body>
+    </body>
+  </worldbody>
+
+  <actuator>
+    <position name="a_base_yaw"    class="servo_big"   joint="base_yaw"     ctrlrange="-1.5708 1.5708"/>
+    <position name="a_shoulder"    class="servo_big"   joint="shoulder"     ctrlrange="-0.35 2.10"/>
+    <position name="a_elbow"       class="servo_big"   joint="elbow"        ctrlrange="-2.40 0.20"/>
+    <position name="a_wrist_pitch" class="servo_small" joint="wrist_pitch"  ctrlrange="-1.5708 1.5708"/>
+  </actuator>
+
+  <sensor>
+    <jointpos name="s_pos_base_yaw"    joint="base_yaw"/>
+    <jointpos name="s_pos_shoulder"    joint="shoulder"/>
+    <jointpos name="s_pos_elbow"       joint="elbow"/>
+    <jointpos name="s_pos_wrist_pitch" joint="wrist_pitch"/>
+    <jointvel name="s_vel_base_yaw"    joint="base_yaw"/>
+    <jointvel name="s_vel_shoulder"    joint="shoulder"/>
+    <jointvel name="s_vel_elbow"       joint="elbow"/>
+    <jointvel name="s_vel_wrist_pitch" joint="wrist_pitch"/>
+    <framepos name="s_tip" objtype="site" objname="tip"/>
+  </sensor>
+
+  <keyframe>
+    <!-- "home": tip at the centroid of the reachable workspace, selected by
+         tests/validate_physics.py to minimise worst-servo gravity load.
+         Tip lands at (0.110, 0.001, 0.215) m with the most-loaded servo at
+         15.1% of stall torque, so the arm can hold this pose indefinitely. -->
+    <key name="home" qpos="0.0058 1.6788 -1.8541 0.7064" ctrl="0.0058 1.6788 -1.8541 0.7064"/>
+  </keyframe>
+</mujoco>

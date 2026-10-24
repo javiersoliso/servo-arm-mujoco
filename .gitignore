@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Entornos virtuales
+venv/
+.venv/
+env/
+
+# Secretos
+.env
+.env.*
+secrets.h
+redes.h
+
+# Salidas de entrenamiento: se regeneran con train/train_ppo.py.
+# Solo se versionan la política entregada (finetune_smooth) y los resúmenes JSON
+# del estudio de recompensas; los registros de TensorBoard y demás corridas no.
+runs/*
+!runs/README.md
+!runs/finetune_smooth/
+!runs/study/
+runs/finetune_smooth/PPO_*/
+events.out.tfevents.*
+
+# Sistema operativo y editores
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
